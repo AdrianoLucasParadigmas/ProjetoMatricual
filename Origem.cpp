@@ -62,9 +62,10 @@ void alunos(tipo_aluno aluno[50], tipo_materia materia[50])
 
 	char aux[50];
 
-	printf("Digite 1 para cadastrar aluno");
-	printf("Digite 2 para realizar matriculas");
-	printf("Digite 4 para menu de impressao");
+	system("cls");
+	printf("Digite 1 para cadastrar aluno \n");
+	printf("Digite 2 para realizar matriculas \n");
+	printf("Digite 3 para menu de impressao \n");
 
 	scanf("%i", &opcao);
 
