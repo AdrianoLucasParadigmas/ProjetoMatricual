@@ -31,10 +31,10 @@ struct tipo_materia
 	int professor[50] = { 0 };
 };
 
-void cadastro_aluno(tipo_aluno aluno[], tipo_qtd *qtd);
-void cadastro_materia(tipo_materia materia[], tipo_qtd *qtd);
-void cadastro_professor(tipo_professor professor[], tipo_qtd *qtd);
-void matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd);
+int cadastro_aluno(tipo_aluno aluno[], tipo_qtd *qtd);
+int cadastro_materia(tipo_materia materia[], tipo_qtd *qtd);
+int cadastro_professor(tipo_professor professor[], tipo_qtd *qtd);
+int matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd);
 int cancelar_matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd);
 void vinculacao(tipo_professor professor[], tipo_materia materia[], tipo_qtd *qtd);
 void remover_vinculacao(tipo_professor professor[], tipo_materia materia[], tipo_qtd *qtd);
@@ -62,11 +62,8 @@ void main()
 		printf("6-Vincular professores a disciplinas\n");
 		printf("7-Remover vinculo de professores a disciplinas\n");
 		printf("8-Menu de impressao\n");
-		printf("9-sair\n");
+		printf("0-sair\n");
 		scanf("%i", &opc);
-
-		if (opc == 9)
-			break;
 
 		switch (opc)
 		{
@@ -94,107 +91,184 @@ void main()
 		case 8:
 			impressao(aluno, materia, professor, &qtd);
 			break;
+		case 0:			
+			break;
 		default:
 			printf("Opcao invalida!");
 			break;
 		}
 	}
-
-	/*{
-	printf("Digite o nome de um aluno\n");
-	gets_s(aluno[1].nome);
-	qtd.alunos++;
-	printf("Digite o nome de uma materia\n");
-	gets_s(materia[1].nome);
-	qtd.materias++;
-	printf("Digite o nome de um professor\n");
-	gets_s(professor[1].nome);
-	qtd.professor++;
-	strcpy(aluno[1].nome, "");
-	strcpy(aluno[2].nome, "");
-	strcpy(aluno[3].nome, "");
-	strcpy(aluno[4].nome, "");
-	strcpy(materia[1].nome, "Fisica");
-	materia[1].aluno[1] = 0;
-	materia[1].aluno[2] = 1;
-	materia[1].aluno[3] = 0;
-	materia[1].aluno[4] = 1;
-	}*/
 }
 
 
 
-void cadastro_aluno(tipo_aluno aluno[], tipo_qtd *qtd)
+int cadastro_aluno(tipo_aluno aluno[], tipo_qtd *qtd)
 {
-	int qtd_cadastros = 0;
+	int qtd_cadastros, duplicada=0;
+	char aluno_temp[50];
 	system("cls");
+	printf("----------Cadastro de materias----------\n\n");
 	printf("Digite a quantida de alunos que deseja cadastrar\n");
 	scanf("%i", &qtd_cadastros);
 	scanf("%c");
+
+	if(qtd_cadastros==0)return(0);	
+
+
 	for (int i = 0; i < qtd_cadastros; i++)
-	{
+		{
 		printf("Digite o nome do aluno:\n");
-		gets_s(aluno[qtd->alunos].nome);
-		qtd->alunos++;
-		//printf("%i", qtd->alunos);
-	}
+		gets_s(aluno_temp);
+		duplicada=0;
+
+		for (int j = 0; j<qtd->alunos; j++)
+			{
+			if (strcmp(aluno_temp, aluno[j].nome) == 0)
+				{
+				printf("\nErro! %s ja cadastrado no sistema\n", aluno_temp);				
+				i--;
+				duplicada=1;				
+				break;
+				}
+			}
+	
+		if (duplicada==0)
+			{
+			strcpy(aluno[qtd->alunos].nome, aluno_temp);
+			qtd->alunos++;			
+			}
+		if(qtd->alunos<2)printf("(%i Aluno cadastrado)\n\n", qtd->alunos);
+		else printf("(%i Alunos cadastradas)\n\n", qtd->alunos);
+		}
 	printf("Cadastro realizado com sucesso!\n");
-	printf("Pressine qualquer tecla para voltar ao menu\n");
-	scanf("%c");
+	system("pause");
 }
 
-
-void cadastro_materia(tipo_materia materia[], tipo_qtd *qtd)
+int cadastro_materia(tipo_materia materia[], tipo_qtd *qtd)
 {
-	int qtd_cadastros = 0;
+	int qtd_cadastros, duplicada=0;
+	char materia_temp[50];
 	system("cls");
+	printf("----------Cadastro de materias----------\n\n");
+	printf("Obs. Nao e possivel cadastrar 2 materias com nomes iguais\n\n");
 	printf("Digite a quantida de materias que deseja cadastrar\n");
 	scanf("%i", &qtd_cadastros);
 	scanf("%c");
-	for (int i = 0; i < qtd_cadastros; i++)
-	{
+
+	if(qtd_cadastros==0)return(0);
+	
+
+	for (int i = 0; i < qtd_cadastros; i++)//Cadastra conjunto de materias 
+		{
 		printf("Digite o nome da materia:\n");
-		gets_s(materia[i].nome);
-		qtd->materias++;
-	}
+		gets_s(materia_temp);
+		duplicada=0;
+
+		for (int j = 0; j<qtd->materias; j++) //Verifica se a materia já está cadastrada
+			{
+			if (strcmp(materia_temp, materia[j].nome) == 0)
+				{
+				printf("\nErro! %s ja cadastrada no sistema\n", materia_temp);				
+				i--;
+				duplicada=1;				
+				break;
+				}
+			}
+	
+		if (duplicada==0)
+			{
+			strcpy(materia[qtd->materias].nome, materia_temp);
+			qtd->materias++;			
+			}
+		if(qtd->materias<2)printf("(%i Materia cadastrada)\n\n", qtd->materias);
+		else printf("(%i Materias cadastradas)\n\n", qtd->materias);
+		}
 	printf("Cadastro realizado com sucesso!\n");
-	printf("Pressine qualquer tecla para voltar ao menu\n");
-	scanf("%c");
-
-
-
-
+	system("pause");
 }
 
-void cadastro_professor(tipo_professor professor[], tipo_qtd *qtd)
+int cadastro_professor(tipo_professor professor[], tipo_qtd *qtd)
 {
-	int qtd_cadastros = 0;
+	int qtd_cadastros, duplicada=0;
+	char professor_temp[50];
 	system("cls");
+	printf("----------Cadastro de professores----------\n\n");
 	printf("Digite a quantida de professores que deseja cadastrar\n");
 	scanf("%i", &qtd_cadastros);
 	scanf("%c");
-	for (int i = 0; i < qtd_cadastros; i++)
-	{
-		printf("Digite o nome do professor:\n");
-		gets_s(professor[i].nome);
-		qtd->professor++;
-	}
+
+	if(qtd_cadastros==0)return(0);	
+
+for (int i = 0; i < qtd_cadastros; i++)//Cadastra conjunto de materias 
+		{
+		printf("Digite o nome da materia:\n");
+		gets_s(professor_temp);
+		duplicada=0;
+
+		for (int j = 0; j<qtd->professor; j++) //Verifica se a materia já está cadastrada
+			{
+			if (strcmp(professor_temp, professor[j].nome) == 0)
+				{
+				printf("\nErro! %s ja cadastrada no sistema\n", professor_temp);				
+				i--;
+				duplicada=1;				
+				break;
+				}
+			}
+	
+		if (duplicada==0)
+			{
+			strcpy(professor[qtd->professor].nome, professor_temp);
+			qtd->professor++;			
+			}
+		if(qtd->professor<2)printf("(%i Professor cadastrado)\n\n", qtd->professor);
+		else printf("(%i Professores cadastrados)\n\n", qtd->professor);
+		}
+
 	printf("Cadastro realizado com sucesso!\n");
-	printf("Pressine qualquer tecla para voltar ao menu\n");
-	scanf("%c");
+	system("pause");
 }
 
-
-void matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd)
+int matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd)
 {
 	tipo_aluno aluno_tmp[50];
 	tipo_materia materia_temp[50];
 	int qtd_cadastros = 0, i, cont = 0;
-	system("cls");
 
-	printf("Digite a quantidade de alnos que deseja matricular:\n");
-	scanf("%i", &qtd_cadastros);
-	scanf("%c");
+	if (qtd->alunos<1)
+		{
+		system("cls");
+		printf("Nao ha alunos cadastrados para matricular!\n\n");
+		system("pause");
+		return(0);
+		}
+
+	if (qtd->materias<1)
+		{
+		system("cls");
+		printf("Nao ha materias cadastradas para matricular!\n\n");
+		system("pause");
+		return(0);
+		}
+
+	while (qtd_cadastros<1)
+		{
+		system("cls");
+		printf("Digite a quantidade de alnos que deseja matricular (Qtd <= que %i:)\n", qtd->alunos);
+		scanf("%i", &qtd_cadastros);
+		scanf("%c");
+		if (qtd_cadastros == 0)
+			{
+			printf("Digite um valor maior que 0\n");
+			system("pause");
+			}		
+		if(qtd->alunos<qtd_cadastros)
+			{
+			printf("Existem apenas %i alunos cadastrados!\n\n", qtd->alunos);
+			qtd_cadastros=0;
+			system("pause");
+			}
+		}
 
 	for (i = 0; i < qtd_cadastros; i++)
 	{
@@ -221,9 +295,26 @@ void matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd)
 	}
 	strcpy(aluno_tmp[i + 1].nome, "\n");
 
-	printf("Digite a quantidade de materias que os alunos serao matriculados:\n");
-	scanf("%i", &qtd_cadastros);
-	scanf("%c");
+	qtd_cadastros = 0;
+	while (qtd_cadastros<1)
+		{
+		system("cls");
+		printf("Digite a quantidade de materias que os alunos serao matriculados (Qtd <= que %i:)\n", qtd->materias);
+		scanf("%i", &qtd_cadastros);
+		scanf("%c");
+		if (qtd_cadastros == 0)
+			{
+			printf("Digite um valor maior que 0\n");
+			system("pause");
+			}		
+		if(qtd->materias<qtd_cadastros)
+			{
+			printf("Existem apenas %i materias cadastradas!\n\n", qtd->materias);
+			qtd_cadastros=0;
+			system("pause");
+			}
+		}
+
 
 
 	for (int i = 0; i < qtd_cadastros; i++)
@@ -257,6 +348,9 @@ void matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd)
 			}
 		}
 	}
+	system ("cls");
+	printf("Matricula realizada com sucesso!\n");
+    system("pasue");
 }
 
 int cancelar_matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd)
@@ -264,13 +358,35 @@ int cancelar_matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd
 	tipo_aluno aluno_tmp[50];
 	tipo_materia materia_temp[50];
 	int qtd_cadastros = 0, i, cont = 0;
-	system("cls");
+	if (qtd->alunos<1) 
+		{
+		system("cls");
+		printf("Nao ha alunos cadastrados para desmatricular!\n\n");		
+		system("pause");
+		return(0);	
+		}
 
-	printf("Digite a quantidade de alnos que deseja desmatricular:\n");
-	scanf("%i", &qtd_cadastros);
-	if (qtd_cadastros == 0)return(0);
+	if (qtd->materias<1)
+		{
+		system("cls");
+		printf("Nao ha materias cadastradas para desmatricular!\n\n");
+		system("pause");
+		return(0);
+		}
 
-	scanf("%c");
+
+	while (qtd_cadastros<1)
+		{
+		printf("Digite a quantidade de alnos que deseja desmatricular:\n");
+		scanf("%i", &qtd_cadastros);
+		scanf("%c");
+		if (qtd_cadastros == 0)
+			{
+			printf("Digite um valor maior que 0\n");
+			system("pause");
+			}
+		}
+
 
 	for (i = 0; i < qtd_cadastros; i++)
 	{
@@ -340,11 +456,28 @@ void vinculacao(tipo_professor professor[], tipo_materia materia[], tipo_qtd *qt
 	tipo_professor professor_tmp[50];
 	tipo_materia materia_temp[50];
 	int qtd_cadastros = 0, i, cont = 0;
-	system("cls");
 
-	printf("Digite a quantidade de professores que deseja vincular:\n");
-	scanf("%i", &qtd_cadastros);
-	scanf("%c");
+	
+
+	while (qtd_cadastros<1)
+		{
+		system("cls");
+		printf("Digite a quantidade de professores que deseja vincular (Qtd <= que %i:)\n", qtd->professor);
+		scanf("%i", &qtd_cadastros);
+		scanf("%c");
+		if (qtd_cadastros == 0)
+			{
+			printf("Digite um valor maior que 0\n");
+			system("pause");
+			}		
+		if(qtd->professor<qtd_cadastros)
+			{
+			printf("Existem apenas %i alunos cadastrados!\n\n", qtd->professor);
+			qtd_cadastros=0;
+			system("pause");
+			}
+		}
+
 
 	for (i = 0; i < qtd_cadastros; i++)
 	{
@@ -371,77 +504,97 @@ void vinculacao(tipo_professor professor[], tipo_materia materia[], tipo_qtd *qt
 	}
 	strcpy(professor_tmp[i + 1].nome, "\n");
 
-	printf("Digite a quantidade de materias que os professores serao vinculados:\n");
-	scanf("%i", &qtd_cadastros);
-	scanf("%c");
+
+
+	qtd_cadastros = 0;
+	while (qtd_cadastros<1)
+		{
+		system("cls");
+		printf("Digite a quantidade de materias que os alunos serao matriculados (Qtd <= que %i:)\n", qtd->materias);
+		scanf("%i", &qtd_cadastros);
+		scanf("%c");
+		if (qtd_cadastros == 0)
+			{
+			printf("Digite um valor maior que 0\n");
+			system("pause");
+			}		
+		if(qtd->materias<qtd_cadastros)
+			{
+			printf("Existem apenas %i materias cadastradas!\n\n", qtd->materias);
+			qtd_cadastros=0;
+			system("pause");
+			}
+		}
+
+
 
 
 	for (int i = 0; i < qtd_cadastros; i++)
-	{
+		{
 		printf("Digite o nome da materia:\n");
 		gets_s(materia_temp[i].nome);
 
 		for (int j = 0; j < qtd->materias; j++)
-		{
+			{
 
 			if (strcmp(materia_temp[i].nome, materia[j].nome) == 0)
-			{
+				{
 				printf("Materia encontrada!\n");
 				cont = 0;
 				while (strcmp(professor_tmp[cont].nome, "\n") != 0)
-				{
-					for (int rp = 0; rp < qtd->professor; rp++)
 					{
+					for (int rp = 0; rp < qtd->professor; rp++)
+						{
 						if (strcmp(professor_tmp[cont].nome, professor[rp].nome) == 0)
 							materia[j].professor[rp] = 1;
-					}
+						}
 					cont++;
-				}
+					}
 				break;
-			}
+				}
 
 			if (j + 1 == qtd->materias)
-			{
+				{
 				printf("Erro! materia nao cadastrada\n");
 				i--;
+				}
 			}
 		}
-	}
 }
+
 void remover_vinculacao(tipo_professor professor[], tipo_materia materia[], tipo_qtd *qtd)
 {
 	tipo_professor professor_tmp[50];
 	tipo_materia materia_temp[50];
 	int qtd_cadastros = 0, i, cont = 0;
-	system("cls");
 
 	printf("Digite a quantidade de professores que deseja desvincular:\n");
 	scanf("%i", &qtd_cadastros);
 	scanf("%c");
 
 	for (i = 0; i < qtd_cadastros; i++)
-	{
+		{
 		printf("Digite o nome do professor:\n");
 		gets_s(professor_tmp[i].nome);
 
 		for (int j = 0; j < qtd->professor; j++)
-		{
+			{
 
 			if (strcmp(professor_tmp[i].nome, professor[j].nome) == 0)
-			{
+				{
 				printf("Professor encontrado!\n");
 				//Sleep(1000);
 				//system("cls");
 				break;
-			}
+				}
 
 			if (j + 1 == qtd->professor)
-			{
+				{
 				printf("Erro! Professor nao cadastrado\n");
 				i--;
+				}
 			}
 		}
-	}
 	strcpy(professor_tmp[i + 1].nome, "\n");
 
 	printf("Digite a quantidade de materias que os professores serao desvinculados:\n");
@@ -450,42 +603,42 @@ void remover_vinculacao(tipo_professor professor[], tipo_materia materia[], tipo
 
 
 	for (int i = 0; i < qtd_cadastros; i++)
-	{
+		{
 		printf("Digite o nome da materia:\n");
 		gets_s(materia_temp[i].nome);
 
 		for (int j = 0; j < qtd->materias; j++)
-		{
+			{
 
 			if (strcmp(materia_temp[i].nome, materia[j].nome) == 0)
-			{
+				{
 				printf("Materia encontrada!\n");
 				cont = 0;
 				while (strcmp(professor_tmp[cont].nome, "\n") != 0)
-				{
-					for (int rp = 0; rp < qtd->professor; rp++)
 					{
+					for (int rp = 0; rp < qtd->professor; rp++)
+						{
 						if (strcmp(professor_tmp[cont].nome, professor[rp].nome) == 0)
 							materia[j].professor[rp] = 0;
-					}
+						}
 					cont++;
-				}
+					}
 				break;
-			}
+				}
 
 			if (j + 1 == qtd->materias)
-			{
+				{
 				printf("Erro! materia nao cadastrada\n");
 				i--;
+				}
 			}
 		}
-	}
 }
 
 void impressao(tipo_aluno aluno[], tipo_materia materia[], tipo_professor professor[], tipo_qtd *qtd)
 {
 	int opcao, i, j;
-	char	materia_aux[50], aluno_aux[50], professor_aux[50];
+	char	materia_aux[50];
 
 	system("cls");
 	printf("\nDigite 1 para imprimir o nome de todos os aluno");
@@ -493,9 +646,7 @@ void impressao(tipo_aluno aluno[], tipo_materia materia[], tipo_professor profes
 	printf("\nDigite 3 para imprimir o nome de todos os professores");
 	printf("\nDigite 4 para imprimir a relacao professor-materia");
 	printf("\nDigite 5 para imprimir a relacao aluno-materia");
-	printf("\nDigite 6 para imprimir a relacao aluno-RA");
-	printf("\nDigite 7 para imprimir as materias que o aluno esta matriculado");
-	printf("\nDigite 8 para imprimir as materias que o professor esta lecionando\n");
+	printf("\nDigite 6 para imprimir a relacao aluno-RA\n");
 
 	scanf("%i", &opcao);
 
@@ -627,57 +778,9 @@ void impressao(tipo_aluno aluno[], tipo_materia materia[], tipo_professor profes
 		system("pause");
 	}
 	break;
-	case 7:
-	{
-		system("cls");
-		printf("Digite o nome do aluno desejado: ");
-		scanf("%s", &aluno_aux);
-
-		for (i = 0; i < qtd->alunos; i++)
-		{
-			if (strcmp(aluno_aux, aluno[i].nome) == 0)
-				break;
-		}
-
-		printf("\nMaterias que o aluno %s esta matriculado:\n", aluno[i].nome);
-
-		for (j = 0; j < qtd->materias; j++)
-		{
-			if (materia[j].aluno[i] == 1)
-			{
-				printf("%s\n", materia[j].nome);
-			}
-		}
-		system("pause");
-	}
-	break;
-	case 8:
-	{
-		system("cls");
-		printf("Digite o nome do professor desejado: ");
-		scanf("%s", &professor_aux);
-
-		for (i = 0; i < qtd->professor; i++)
-		{
-			if (strcmp(professor_aux, professor[i].nome) == 0)
-				break;
-		}
-
-		printf("\nMaterias que o professor %s esta lecionando:\n", professor[i].nome);
-
-		for (j = 0; j < qtd->materias; j++)
-		{
-			if (materia[j].professor[i] == 1)
-			{
-				printf("%s\n", materia[j].nome);
-			}
-		}
-		system("pause");
-
-	}
-	break;
 	default:
 		printf("Opcao Invalida");
 		break;
 	}
 }
+
