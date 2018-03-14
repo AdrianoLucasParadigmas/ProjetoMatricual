@@ -190,6 +190,7 @@ void matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd)
 	tipo_aluno aluno_tmp[50];
 	tipo_materia materia_temp[50];
 	int qtd_cadastros = 0, i, cont = 0;
+	system("cls");
 
 	printf("Digite a quantidade de alnos que deseja matricular:\n");
 	scanf("%i", &qtd_cadastros);
@@ -263,11 +264,12 @@ int cancelar_matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd
 	tipo_aluno aluno_tmp[50];
 	tipo_materia materia_temp[50];
 	int qtd_cadastros = 0, i, cont = 0;
+	system("cls");
 
 	printf("Digite a quantidade de alnos que deseja desmatricular:\n");
 	scanf("%i", &qtd_cadastros);
 	if (qtd_cadastros == 0)return(0);
-	
+
 	scanf("%c");
 
 	for (i = 0; i < qtd_cadastros; i++)
@@ -338,6 +340,7 @@ void vinculacao(tipo_professor professor[], tipo_materia materia[], tipo_qtd *qt
 	tipo_professor professor_tmp[50];
 	tipo_materia materia_temp[50];
 	int qtd_cadastros = 0, i, cont = 0;
+	system("cls");
 
 	printf("Digite a quantidade de professores que deseja vincular:\n");
 	scanf("%i", &qtd_cadastros);
@@ -410,6 +413,7 @@ void remover_vinculacao(tipo_professor professor[], tipo_materia materia[], tipo
 	tipo_professor professor_tmp[50];
 	tipo_materia materia_temp[50];
 	int qtd_cadastros = 0, i, cont = 0;
+	system("cls");
 
 	printf("Digite a quantidade de professores que deseja desvincular:\n");
 	scanf("%i", &qtd_cadastros);
@@ -481,7 +485,7 @@ void remover_vinculacao(tipo_professor professor[], tipo_materia materia[], tipo
 void impressao(tipo_aluno aluno[], tipo_materia materia[], tipo_professor professor[], tipo_qtd *qtd)
 {
 	int opcao, i, j;
-	char	materia_aux[50];
+	char	materia_aux[50], aluno_aux[50], professor_aux[50];
 
 	system("cls");
 	printf("\nDigite 1 para imprimir o nome de todos os aluno");
@@ -489,7 +493,9 @@ void impressao(tipo_aluno aluno[], tipo_materia materia[], tipo_professor profes
 	printf("\nDigite 3 para imprimir o nome de todos os professores");
 	printf("\nDigite 4 para imprimir a relacao professor-materia");
 	printf("\nDigite 5 para imprimir a relacao aluno-materia");
-	printf("\nDigite 6 para imprimir a relacao aluno-RA\n");
+	printf("\nDigite 6 para imprimir a relacao aluno-RA");
+	printf("\nDigite 7 para imprimir as materias que o aluno esta matriculado");
+	printf("\nDigite 8 para imprimir as materias que o professor esta lecionando\n");
 
 	scanf("%i", &opcao);
 
@@ -619,6 +625,55 @@ void impressao(tipo_aluno aluno[], tipo_materia materia[], tipo_professor profes
 		}
 
 		system("pause");
+	}
+	break;
+	case 7:
+	{
+		system("cls");
+		printf("Digite o nome do aluno desejado: ");
+		scanf("%s", &aluno_aux);
+
+		for (i = 0; i < qtd->alunos; i++)
+		{
+			if (strcmp(aluno_aux, aluno[i].nome) == 0)
+				break;
+		}
+
+		printf("\nMaterias que o aluno %s esta matriculado:\n", aluno[i].nome);
+
+		for (j = 0; j < qtd->materias; j++)
+		{
+			if (materia[j].aluno[i] == 1)
+			{
+				printf("%s\n", materia[j].nome);
+			}
+		}
+		system("pause");
+	}
+	break;
+	case 8:
+	{
+		system("cls");
+		printf("Digite o nome do professor desejado: ");
+		scanf("%s", &professor_aux);
+
+		for (i = 0; i < qtd->professor; i++)
+		{
+			if (strcmp(professor_aux, professor[i].nome) == 0)
+				break;
+		}
+
+		printf("\nMaterias que o professor %s esta lecionando:\n", professor[i].nome);
+
+		for (j = 0; j < qtd->materias; j++)
+		{
+			if (materia[j].professor[i] == 1)
+			{
+				printf("%s\n", materia[j].nome);
+			}
+		}
+		system("pause");
+
 	}
 	break;
 	default:
