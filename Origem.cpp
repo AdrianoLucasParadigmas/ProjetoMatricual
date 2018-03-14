@@ -35,7 +35,7 @@ void cadastro_aluno(tipo_aluno aluno[], tipo_qtd *qtd);
 void cadastro_materia(tipo_materia materia[], tipo_qtd *qtd);
 void cadastro_professor(tipo_professor professor[], tipo_qtd *qtd);
 void matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd);
-void cancelar_matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd);
+int cancelar_matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd);
 void vinculacao(tipo_professor professor[], tipo_materia materia[], tipo_qtd *qtd);
 void remover_vinculacao(tipo_professor professor[], tipo_materia materia[], tipo_qtd *qtd);
 void impressao(tipo_aluno aluno[], tipo_materia materia[], tipo_professor professor[], tipo_qtd *qtd);
@@ -258,7 +258,7 @@ void matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd)
 	}
 }
 
-void cancelar_matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd)
+int cancelar_matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qtd)
 {
 	tipo_aluno aluno_tmp[50];
 	tipo_materia materia_temp[50];
@@ -266,6 +266,8 @@ void cancelar_matricula(tipo_aluno aluno[], tipo_materia materia[], tipo_qtd *qt
 
 	printf("Digite a quantidade de alnos que deseja desmatricular:\n");
 	scanf("%i", &qtd_cadastros);
+	if (qtd_cadastros == 0)return(0);
+	
 	scanf("%c");
 
 	for (i = 0; i < qtd_cadastros; i++)
